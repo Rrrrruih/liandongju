@@ -1,0 +1,233 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>初级汉语语法随堂测试：连动句 (Sentences with Serial Verbs)</title>
+    <style>
+        body { font-family: 'Helvetica Neue', Arial, sans-serif; background-color: #f5f7fb; color: #333; margin: 0; padding: 20px; }
+        .container { max-width: 800px; margin: 0 auto; background: white; padding: 30px; border-radius: 12px; box-shadow: 0 4px 6px rgba(0,0,0,0.05); }
+        h1 { text-align: center; color: #0f766e; margin-bottom: 10px; }
+        .subtitle { text-align: center; color: #666; margin-bottom: 30px; }
+        
+        /* 课件例句展示区 - 换成了更有活力的青色系 */
+        .grammar-tip { background: #f0fdfa; border-left: 5px solid #0d9488; padding: 20px; border-radius: 0 8px 8px 0; margin-bottom: 30px; }
+        .grammar-tip h3 { margin-top: 0; color: #0f766e; }
+        .grammar-tip ul { padding-left: 20px; margin-bottom: 0; line-height: 1.8; }
+        
+        /* 语言选择模块样式 */
+        .lang-selector { display: flex; justify-content: center; gap: 10px; flex-wrap: wrap; background: #f1f5f9; padding: 15px; border-radius: 8px; margin-bottom: 30px; }
+        .lang-btn { padding: 8px 16px; border: none; background: white; border-radius: 20px; cursor: pointer; font-weight: bold; box-shadow: 0 2px 4px rgba(0,0,0,0.05); transition: all 0.2s; }
+        .lang-btn:hover { background: #0f766e; color: white; }
+        .lang-btn.active { background: #0f766e; color: white; }
+
+        /* 题目样式 */
+        .question-card { background: #fff; border: 1px solid #e2e8f0; padding: 20px; border-radius: 8px; margin-bottom: 25px; }
+        .question-title { font-size: 1.1rem; font-weight: bold; margin-bottom: 15px; color: #2d3748; line-height: 1.6; }
+        .options { display: flex; flex-direction: column; gap: 10px; }
+        .option-btn { padding: 12px 15px; border: 1px solid #cbd5e1; border-radius: 6px; text-align: left; background: #fff; cursor: pointer; transition: all 0.2s; font-size: 1rem; }
+        .option-btn:hover { background: #f8fafc; border-color: #94a3b8; }
+        
+        /* 结果与解析 */
+        .result-box { margin-top: 15px; padding: 15px; border-radius: 6px; display: none; font-size: 0.95rem; line-height: 1.6; white-space: pre-line; }
+        .correct { background-color: #ecfdf5; border: 1px solid #10b981; color: #065f46; }
+        .incorrect { background-color: #fef2f2; border: 1px solid #ef4444; color: #991b1b; }
+        .hint-text { color: #475569; font-style: italic; margin-top: 10px; font-size: 0.9rem; display: block; }
+    </style>
+</head>
+<body>
+
+<div class="container">
+    <h1>📝 初级汉语语法随堂测试</h1>
+    <div class="subtitle">语法项目：连动句 (Sentences with Serial Verbs)</div>
+
+    <!-- 💡 课堂例句同步展示区 -->
+    <div class="grammar-tip">
+        <h3>💡 核心语法公式 (Grammar Formula)：</h3>
+        <p><strong>主语 (Subject) + 动词1 (Verb1) + (宾语1) + 动词2 (Verb2) + (宾语2)</strong></p>
+        <ul>
+            <li><strong>表示目的 (Purpose)：</strong>他<strong>去</strong>中国<strong>学习</strong>汉语。(He goes to China to study Chinese.)</li>
+            <li><strong>表示方式 (Manner/Tool)：</strong>我们<strong>坐</strong>飞机<strong>去</strong>北京。(We take a plane to go to Beijing.)</li>
+            <li><strong>动作先后 (Sequence)：</strong>他每天<strong>吃</strong>完饭<strong>看</strong>电视。(He watches TV after eating everyday.)</li>
+        </ul>
+    </div>
+
+    <!-- 🌟 顶端语言选择模块 🌟 -->
+    <div class="lang-selector">
+        <button class="lang-btn active" onclick="switchLanguage('zh', event)">🇨🇳 汉语 (Default)</button>
+        <button class="lang-btn" onclick="switchLanguage('en', event)">🇺🇸 English</button>
+        <button class="lang-btn" onclick="switchLanguage('th', event)">🇹🇭 ภาษาไทย</button>
+        <button class="lang-btn" onclick="switchLanguage('id', event)">🇮🇩 Bahasa Indonesia</button>
+        <button class="lang-btn" onclick="switchLanguage('fr', event)">🇫🇷 Français</button>
+        <button class="lang-btn" onclick="switchLanguage('ar', event)">🇸🇦 العربية</button>
+    </div>
+
+    <!-- 题目区域 -->
+    <div id="quiz-container"></div>
+</div>
+
+<script>
+// 10道连动句多语言大纲数据集
+const quizData = [
+    {
+        num: 1, words: "去 / 汉语 / 学习 / 我 / 中国",
+        translations: { zh: "连词成句：表示去某地做某事（目的）。", en: "Word Order: Going somewhere to do something (Purpose).", th: "จัดเรียงประโยค: ไปสถานที่ใดเพื่อทำสิ่งใด (วัตถุประสงค์)", id: "Urutan Kata: Pergi ke suatu tempat untuk melakukan sesuatu (Tujuan).", fr: "Ordre des mots: Aller quelque part pour faire quelque chose.", ar: "ترتيب الكلمات: الذهاب إلى مكان ما لفعل شيء ما (الغرض)." },
+        options: [
+            { text: "A. 我去中国学习汉语。", isCorrect: true, rationale: { zh: "✔️ 正确！连动句中，通常“去/来 + 地方”在前（动作1），“做某事”在后（动作2，表示目的）。", en: "✔️ Correct! '去/来 + Place' (Verb 1) always comes before the purpose action (Verb 2).", th: "✔️ ถูกต้อง! โครงสร้าง '去/来 + สถานที่' ต้องอยู่ก่อน กริยาตัวที่ 2 ที่บอกวัตถุประสงค์เสมอ", id: "✔️ Benar! '去/来 + Tempat' (Kata Kerja 1) selalu mendahului tindakan tujuan (Kata Kerja 2).", fr: "✔️ Correct! '去/来 + Lieu' précède toujours l'action du but (Verbe 2).", ar: "✔️ صحيح! (去/来 + المكان) تأتي دائماً قبل فعل الغرض." } },
+            { text: "B. 我学习汉语去中国。", isCorrect: false, rationale: { zh: "❌ 错误！不能把目的（学习汉语）放在行动（去中国）的前面。", en: "❌ Incorrect! You cannot put the purpose before the movement verb.", th: "❌ ผิด! ห้ามเอาวัตถุประสงค์ขึ้นก่อนกริยาการเคลื่อนที่", id: "❌ Salah! Tidak boleh menaruh tujuan sebelum kata kerja pergerakan.", fr: "❌ Incorrect! On ne peut pas mettre le but avant le mouvement.", ar: "❌ خطأ! لا يمكن وضع الغرض قبل فعل الحركة." } },
+            { text: "C. 中国稳妥去学习汉语。", isCorrect: false, rationale: { zh: "❌ 错误！地点名词“中国”不能直接放在句首作主语。", en: "❌ Incorrect! The place 'China' cannot be the subject here.", th: "❌ ผิด! สถานที่ '中国' ไม่สามารถขึ้นต้นเป็นประธานในบริบทนี้ได้", id: "❌ Salah! Nama tempat tidak bisa langsung menjadi subjek di sini.", fr: "❌ Incorrect! Le lieu ne peut pas être le sujet ici.", ar: "❌ خطأ! اسم المكان لا يمكن أن يكون فاعلاً هنا." } },
+            { text: "D. 我去学习中国汉语。", isCorrect: false, rationale: { zh: "❌ 错误！改变了原意，“中国”成了修饰汉语的词，且缺少了去的地点。", en: "❌ Incorrect! This changes the meaning and misses the location to go to.", th: "❌ ผิด! ความหมายเปลี่ยนและขาดสถานที่ที่จะไป", id: "❌ Salah! Makna kalimat berubah dan kehilangan lokasi yang dituju.", fr: "❌ Incorrect! Cela change le sens et omet le lieu.", ar: "❌ خطأ! هذا يغير المعنى ويفقد مكان الذهاب." } }
+        ],
+        hint: { zh: "提示：去 + 哪儿 + 做什么", en: "Hint: Go to + Where + Do what", th: "คำใบ้: 去 + ที่ไหน + ทำอะไร", id: "Petunjuk: 去 + Ke mana + Melakukan apa", fr: "Indice: Aller + Où + Faire quoi", ar: "تلميح: الذهاب + إلى أين + فعل ماذا" }
+    },
+    {
+        num: 2, words: "我们_______飞机去北京。",
+        translations: { zh: "选择填空：表示交通方式（工具）。", en: "Fill in the blank: Method of transportation (Manner).", th: "เติมคำในช่องว่าง: วิธีการเดินทาง (ยานพาหนะ)", id: "Isilah titik-titik: Metode transportasi (Cara).", fr: "Remplissez le blanc: Moyen de transport.", ar: "ملء الفراغ: وسيلة النقل." },
+        options: [
+            { text: "A. 坐", isCorrect: true, rationale: { zh: "✔️ 正确！汉语中用“坐/乘 + 交通工具”作动词1，表示后面动作2（去北京）的方式。", en: "✔️ Correct! Use '坐/乘 (to ride/take) + vehicle' as Verb 1 to show the manner of Verb 2.", th: "✔️ ถูกต้อง! ใช้ '坐' (นั่ง) + ยานพาหนะ เป็นกริยาตัวที่ 1 เพื่อบอกวิธีการของกริยาตัวที่ 2", id: "✔️ Benar! Gunakan '坐' + kendaraan sebagai Kata Kerja 1 untuk menunjukkan cara.", fr: "✔️ Correct! Utilisez '坐' + véhicule comme Verbe 1 pour montrer le moyen.", ar: "✔️ صحيح! نستخدم '坐' (يركب) + الوسيلة كفعل أول لبيان طريقة الفعل الثاني." } },
+            { text: "B. 去", isCorrect: false, rationale: { zh: "❌ 错误！语意重复，“去飞机去北京”不合逻辑。", en: "❌ Incorrect! Redundant use of '去'.", th: "❌ ผิด! คำว่า '去' ซ้ำซ้อนและไม่ถูกหลักไวยากรณ์", id: "❌ Salah! Penggunaan '去' yang berulang dan tidak logis.", fr: "❌ Incorrect! Utilisation redondante de '去'.", ar: "❌ خطأ! تكرار غير منطقي للفعل '去'." } },
+            { text: "C. 开", isCorrect: false, rationale: { zh: "❌ 错误！“开飞机”的意思是驾驶飞机（Pilot），作为乘客应该用“坐”。", en: "❌ Incorrect! '开飞机' means to pilot/fly the plane yourself. Use '坐' for passengers.", th: "❌ ผิด! '开飞机' แปลว่าขับเครื่องบินเอง (กัปตัน) ถ้าเป็นผู้โดยสารต้องใช้ '坐'", id: "❌ Salah! '开飞机' berarti menerbangkan pesawat sendiri. Gunakan '坐' untuk penumpang.", fr: "❌ Incorrect! '开' signifie piloter l'avion soi-même. Utilisez '坐'.", ar: "❌ خطأ! '开' تعني يقود الطائرة بنفسه. استخدم '坐' للركاب." } },
+            { text: "D. 在", isCorrect: false, rationale: { zh: "❌ 错误！“在”是介词或表示存在，后面接飞机不能表示“乘车/乘机”的动态方式。", en: "❌ Incorrect! '在' indicates location, it cannot show dynamic transportation manner here.", th: "❌ ผิด! '在' บอกสถานที่ ไม่สามารถใช้นำหน้ายานพาหนะเพื่อบอกการเดินทางได้", id: "❌ Salah! '在' menunjukkan lokasi, tidak bisa menunjukkan cara bergerak.", fr: "❌ Incorrect! 'In' indique le lieu, pas le mouvement.", ar: "❌ خطأ! '在' تفيد مكان التواجد ولا تفيد طريقة الانتقال هنا." } }
+        ],
+        hint: { zh: "提示：乘某种交通工具去某地，动词用“坐”。", en: "Hint: To take a transportation, the verb is '坐' (sit/take).", th: "คำใบ้: โดยสารยานพาหนะทั่วไป ใช้คำกริยา '坐'", id: "Petunjuk: Untuk naik kendaraan, kata kerjanya adalah '坐'.", fr: "Indice: Pour prendre un transport, le verbe est '坐'.", ar: "تلميح: لركوب وسائل النقل، الفعل المستخدم هو '坐'." }
+    },
+    {
+        num: 3, words: "选择正确的连动句。",
+        translations: { zh: "选择正确的句子：注意动作的先后顺序。", en: "Select the correct sentence: Pay attention to the sequence.", th: "เลือกประโยคที่ถูกต้อง: สังเกตลำดับก่อนหลังของเหตุการณ์", id: "Pilihlah kalimat yang benar: Perhatikan urutan tindakan.", fr: "Sélectionnez la phrase correcte: Attention à la séquence.", ar: "اختر الجملة الصحيحة: انتبه إلى ترتيب الأفعال." },
+        options: [
+            { text: "A. 他中午去食堂吃饭。", isCorrect: true, rationale: { zh: "✔️ 正确！先“去食堂”（动作1），然后“吃饭”（动作2），顺序符合自然发生的先后规律。", en: "✔️ Correct! First 'go to canteen' (Verb 1), then 'eat lunch' (Verb 2).", th: "✔️ ถูกต้อง! ต้อง 'ไปโรงอาหาร' ก่อน (กริยา 1) แล้วจึง 'กินข้าว' (กริยา 2)", id: "✔️ Benar! 'Pergi ke kantin' dulu, baru kemudian 'makan'.", fr: "✔️ Correct! D'abord 'aller à la cantine', ensuite 'manger'.", ar: "✔️ صحيح! يذهب إلى الكافتيريا أولاً (فعل 1) ثم يأكل (فعل 2)." } },
+            { text: "B. 他中午吃饭去食堂。", isCorrect: false, rationale: { zh: "❌ 错误！颠倒了逻辑顺序，不可能先吃了饭再去食堂开吃。", en: "❌ Incorrect! Scrambled logic. You can't eat before going to the canteen.", th: "❌ ผิด! ลำดับเหตุการณ์ผิดเพี้ยน กินข้าวเสร็จแล้วจะไปโรงอาหารเพื่อกินอีกไม่ได้", id: "❌ Salah! Logika terbalik. Tidak mungkin makan dulu baru pergi ke kantin.", fr: "❌ Incorrect! Logique inversée.", ar: "❌ خطأ! المنطق معكوس." } },
+            { text: "C. 去食堂他中午吃饭。", isCorrect: false, rationale: { zh: "❌ 错误！主语“他”和时间词的位置摆放错误，动词短语不能直接放句首。", en: "❌ Incorrect! Verb phrases cannot break the Subject + Time structure.", th: "❌ ผิด! วลีกริยา不สามารถขึ้นหน้าประธานในประโยคนี้ได้", id: "❌ Salah! Frasa kata kerja tidak boleh mendahului subjek.", fr: "❌ Incorrect! La structure de la phrase est fausse.", ar: "❌ خطأ! لا يمكن للعبارة الفعلية أن تسبق الفاعل." } },
+            { text: "D. 他去吃饭中午食堂。", isCorrect: false, rationale: { zh: "❌ 错误！语序完全混乱，时间词和地点名词位置错误。", en: "❌ Incorrect! Time and place nouns are completely misplaced.", th: "❌ ผิดรุนแรง! คำบอกเวลาและสถานที่วางสลับที่จนเสียความหมาย", id: "❌ Salah total! Posisi kata waktu dan tempat keliru.", fr: "❌ Incorrect! Les mots de temps et de lieu sont mal placés.", ar: "❌ خطأ! كلمات الوقت المكان غير صحيحة تماماً." } }
+        ],
+        hint: { zh: "提示：按照现实生活中动作发生的先后顺序排列。", en: "Hint: Arrange according to the chronological order in real life.", th: "คำใบ้: เรียงตามลำดับเหตุการณ์ที่เกิดขึ้นจริงในชีวิตประจำวัน", id: "Petunjuk: Susun berdasarkan urutan kronologis di kehidupan nyata.", fr: "Indice: Organisez selon l'ordre chronologique réel.", ar: "تلميح: رتب الأفعال حسب حدوثها في الواقع." }
+    },
+    {
+        num: 4, words: "用 / 筷子 / 吃饭 / 韩国人",
+        translations: { zh: "连词成句：表示使用某种工具做某事。", en: "Word Order: Using a tool to do something.", th: "จัดเรียงประโยค: การใช้เครื่องมือ/อุปกรณ์ทำสิ่งใดสิ่งหนึ่ง", id: "Urutan Kata: Menggunakan alat untuk melakukan sesuatu.", fr: "Ordre des mots: Utiliser un outil pour faire quelque chose.", ar: "ترتيب الكلمات: استخدام أداة لفعل شيء ما." },
+        options: [
+            { text: "A. 韩国人用筷子吃饭。", isCorrect: true, rationale: { zh: "✔️ 正确！“用 + 工具（筷子）”是动作1，作为方式修饰动作2“吃饭”。", en: "✔️ Correct! '用 + Tool' acts as Verb 1, showing the manner/tool for Verb 2.", th: "✔️ ถูกต้อง! '用 + ตะเกียบ' เป็นกริยาที่ 1 เพื่อแสดงวิธีหรืออุปกรณ์ในการ 'กินข้าว' (กริยา 2)", id: "✔️ Benar! '用 + Alat' berfungsi sebagai Kata Kerja 1, menunjukkan cara untuk Kata Kerja 2.", fr: "✔️ Correct! '用 + Outil' sert de Verbe 1 pour montrer le moyen du Verbe 2.", ar: "✔️ صحيح! (用 + الأداة) تعمل كفعل أول لبيان طريقة وأداة الفعل الثاني." } },
+            { text: "B. 韩国人吃饭用筷子。", isCorrect: false, rationale: { zh: "❌ 错误！受英语等外语干扰的常见偏误。汉语必须先说工具，再说动作。", en: "❌ Incorrect! Common mistake influenced by English. Chinese puts the tool before the action.", th: "❌ ผิดบ่อย! ห้ามแปลตรงตัวจากภาษาอังกฤษ ภาษาจีนต้องพูดถึงอุปกรณ์ก่อนลงมือทำ", id: "❌ Salah! Terpengaruh bahasa Inggris. Bahasa Mandarin harus menyebutkan alatnya dulu baru tindakannya.", fr: "❌ Incorrect! Erreur courante induite par l'anglais. Le chinois met l'outil avant l'action.", ar: "❌ خطأ! خطأ شائع بسبب تأثير اللغات الأخرى. في الصينية يجب ذكر الأداة قبل الفعل." } },
+            { text: "C. 用筷子韩国人吃饭。", isCorrect: false, rationale: { zh: "❌ 错误！主语“韩国人”必须在动词短语的前面。", en: "❌ Incorrect! The subject must be placed before the verb phrases.", th: "❌ ผิด! ประธาน '韩国人' ต้องอยู่ข้างหน้าวลีกริยา", id: "❌ Salah! Subjek harus ditaruh sebelum frasa kata kerja.", fr: "❌ Incorrect! Le sujet doit se placer avant les verbes.", ar: "❌ خطأ! الفاعل يجب أن يكون قبل العبارات الفعلية." } },
+            { text: "D. 韩国人筷子用吃饭。", isCorrect: false, rationale: { zh: "❌ 错误！动词“用”必须在名词“筷子”的前面，不能倒置。", en: "❌ Incorrect! The verb '用' must precede the noun '筷子'.", th: "❌ ผิด! กริยา '用' ต้องอยู่หน้านาม '筷子' สลับที่ไม่ได้", id: "❌ Salah! Kata kerja '用' harus mendahului kata benda.", fr: "❌ Incorrect! Le verbe '用' doit précéder le nom.", ar: "❌ خطأ! الفعل '用' يجب أن يسبق الاسم '筷子'." } }
+        ],
+        hint: { zh: "提示：用 + 什么工具 + 做什么事", en: "Hint: Use + What tool + Do what", th: "คำใบ้: 用 + อุปกรณ์อะไร + ทำอะไร", id: "Petunjuk: 用 + Alat apa + Melakukan apa", fr: "Indice: 用 + Quel outil + Faire quoi", ar: "تلميح: 用 + أي أداة + فعل ماذا" }
+    },
+    {
+        num: 5, words: "麦克想_______银行换钱。",
+        translations: { zh: "选择填空：结合目的与地点动词。", en: "Fill in the blank: Combining destination and purpose.", th: "เติมคำในช่องว่าง: รวมคำกริยาแสดงสถานที่และวัตถุประสงค์", id: "Isilah titik-titik: Menggabungkan tujuan dan kata kerja tempat.", fr: "Remplissez le blanc: Destination et but.", ar: "ملء الفراغ: الجمع بين المكان والغرض." },
+        options: [
+            { text: "A. 去", isCorrect: true, rationale: { zh: "✔️ 正确！“去 + 银行（地点）”作第一动词短语，表示为了后面的“换钱”而移动。", en: "✔️ Correct! '去 + Place' serves as the movement to fulfill the purpose '换钱'.", th: "✔️ ถูกต้อง! '去 + ธนาคาร' เป็นกริยาแรก เพื่อบอกการเคลื่อนที่ไปทำวัตถุประสงค์ (แลกเงิน)", id: "✔️ Benar! '去 + Tempat' berfungsi sebagai pergerakan untuk memenuhi tujuan '换钱'.", fr: "✔️ Correct! '去 + Lieu' sert de mouvement pour accomplir le but.", ar: "✔️ صحيح! '去 + المكان' يعمل كحركة لتحقيق الغرض وهو (换钱)." } },
+            { text: "B. 在", isCorrect: false, rationale: { zh: "❌ 错误！如果用“在”，后面通常直接接动作“在银行换钱”，而不是形成两个连续动词的连动结构。", en: "❌ Incorrect! '在' is a preposition for location, which would require '在银行换钱' without another verb before the place.", th: "❌ ผิด! ถ้าใช้ '在' จะเป็นโครงสร้างบทเสริมสถานที่ ไม่ใช่โครงสร้างกริยาต่อเนื่อง (连动句)", id: "❌ Salah! '在' adalah kata depan tempat, tidak membentuk kalimat连动句 di sini.", fr: "❌ Incorrect! '在' est une préposition de lieu.", ar: "❌ خطأ! '在' حرف جر للمكان، ولا يشكل جملة أفعال متسلسلة هنا." } },
+            { text: "C. 坐", isCorrect: false, rationale: { zh: "❌ 错误！银行是处所，不能配合动词“坐”来作为交通方式。", en: "❌ Incorrect! Bank is a location, you cannot 'ride/sit' a bank.", th: "❌ ผิด! ธนาคารเป็นสถานที่ ไม่สามารถใช้กริยา '坐' (นั่ง) ได้", id: "❌ Salah! Bank adalah tempat, tidak bisa menggunakan kata kerja '坐'.", fr: "❌ Incorrect! La banque est un lieu, on ne peut pas la 's'asseoir'.", ar: "❌ خطأ! البنك مكان، لا يمكن استخدام الفعل '坐' معه." } },
+            { text: "D. 学习", isCorrect: false, rationale: { zh: "❌ 错误！“学习银行”语义完全不通。", en: "❌ Incorrect! '学习银行' makes no sense at all.", th: "❌ ผิด! '学习银行' ความหมายไม่ถูกต้องอย่างสิ้นเชิง", id: "❌ Salah! '学习银行' sama sekali tidak masuk akal.", fr: "❌ Incorrect! '学习银行' n'a aucun sens.", ar: "❌ خطأ! '学习银行' لا معنى لها على الإطلاق." } }
+        ],
+        hint: { zh: "提示：银行是地点，前面需要一个表示“出发、去”的动态动词。", en: "Hint: Bank is a place; it needs a movement verb like '去' in front.", th: "คำใบ้: ธนาคารเป็นสถานที่ ข้างหน้าต้องใช้กริยาเคลื่อนที่ เช่น '去'", id: "Petunjuk: Bank adalah tempat; perlu kata kerja gerak seperti '去'.", fr: "Indice: La banque est un lieu, il faut un verbe de mouvement comme '去'.", ar: "تلميح: البنك مكان؛ يحتاج إلى فعل حركة مثل '去' أمامه." }
+    },
+    {
+        num: 6, words: "借 / 我 / 看 / 一本中文书 / 图书馆",
+        translations: { zh: "【⚠️ 高难度综合】连词成句：结合介词短语与连动句。", en: "【⚠️ Advanced】Word Order: Combining prepositional and serial verb structure.", th: "【⚠️ ระดับสูง】จัดเรียงประโยค: ผสมผสานโครงสร้างบทเสริมและกริยาต่อเนื่อง", id: "【⚠️ Tingkat Lanjut】Urutan Kata: Kombinasi struktur kata depan dan kata kerja serial.", fr: "【⚠️ Avancé】Ordre des mots: Combinaison de préposition et verbes en série.", ar: "【⚠️ مستوى متقدم】ترتيب الكلمات: الجمع بين شبه الجملة من الجار والمجرور والأفعال المتسلسلة." },
+        options: [
+            { text: "A. 我从图书馆借一本中文书看。", isCorrect: true, rationale: { zh: "✔️ 正确！“从图书馆借书”是一个大动作（包含介词来源），“看”是借书的目的（动词2）。", en: "✔️ Correct! '从图书馆借书' (borrow from library) is Action 1, and '看' (to read) is the purpose (Action 2).", th: "✔️ ถูกต้อง! '从图书馆借书' (ยืมหนังสือจากห้องสมุด) เป็นกริยาที่ 1 และ '看' (ดู/อ่าน) เป็นวัตถุประสงค์ (กริยา 2)", id: "✔️ Benar! '从图书馆借书' adalah Tindakan 1, dan '看' adalah tujuannya (Tindakan 2).", fr: "✔️ Correct! '从图书馆借书' est l'action 1, et '看' est le but (Action 2).", ar: "✔️ صحيح! '从图书馆借书' (استعارة كتاب من المكتبة) هو الفعل الأول، و '看' (ليقرأه) هو الغرض (الفعل الثاني)." } },
+            { text: "B. 我借一本中文书从图书馆看。", isCorrect: false, rationale: { zh: "❌ 错误！介词短语“从图书馆”必须放在它修饰的动词“借”前面，不能放句尾。", en: "❌ Incorrect! The prepositional phrase '从...' must be placed before the verb '借'.", th: "❌ ผิด! วลีบุพบท '从...' ต้องวางไว้หน้าคำกริยา '借' ห้ามเอาไว้ท้ายประโยค", id: "❌ Salah! Frasa kata depan '从...' harus ditaruh sebelum kata kerja '借'.", fr: "❌ Incorrect! La phrase prépositionnelle '从...' doit être avant le verbe.", ar: "❌ (*_*) خطأ! شبه الجملة '从...' يجب أن توضع قبل الفعل '借'." } },
+            { text: "C. 我看一本中文书从图书馆借。", isCorrect: false, rationale: { zh: "❌ 错误！颠倒了借与看的先后因果逻辑。", en: "❌ Incorrect! Reversed the logical sequence of borrowing and reading.", th: "❌ ผิด! ลำดับตรรกะผิด ต้องยืมก่อนถึงจะอ่านได้", id: "❌ Salah! Mengbalikkan urutan logis antara meminjam dan membaca.", fr: "❌ Incorrect! Logique inversée entre emprunter et lire.", ar: "❌ خطأ! عكس الترتيب المنطقي بين الاستعارة والقراءة." } },
+            { text: "D. 从图书馆我借看一本中文书。", isCorrect: false, rationale: { zh: "❌ 错误！语序混乱，“借看”不能生硬地连在一起变成一个词。", en: "❌ Incorrect! '借' and '看' cannot be combined directly as a single word here.", th: "❌ ผิด! ไม่สามารถเอา '借' และ '看' มาต่อติดกันเป็นคำเดียวได้", id: "❌ Salah! '借' and '看' tidak bisa digabung secara langsung.", fr: "❌ Incorrect! '借' et '看' ne peuvent pas être collés ensemble.", ar: "❌ خطأ! لا يمكن دمج '借' و '看' معاً ككلمة واحدة هنا." } }
+        ],
+        hint: { zh: "提示：先从某地借了书，之后才能看书（从...借...看）。", en: "Hint: Borrow from somewhere first, then you can read it.", th: "คำใบ้: ต้องยืมจากสถานที่ก่อน จากนั้นจึงจะอ่านได้ (从...借...看)", id: "Petunjuk: Pinjam dari suatu tempat dulu, baru bisa dibaca.", fr: "Indice: Empruntez d'abord, vous pourrez lire ensuite.", ar: "تلميح: استعر من مكان ما أولاً، ثم يمكنك قراءته." }
+    },
+    {
+        num: 7, words: "选择正确的句子（关于买东西）。",
+        translations: { zh: "选择正确的句子：商场购物场景。", en: "Select the correct sentence: Shopping mall scenario.", th: "เลือกประโยคที่ถูกต้อง: สถานการณ์ซื้อของที่ห้างสรรพสินค้า", id: "Pilihlah kalimat yang benar: Skenario berbelanja.", fr: "Sélectionnez la phrase correcte: Scénario d'achat.", ar: "اختر الجملة الصحيحة: سيناريو التسوق." },
+        options: [
+            { text: "A. 老师去商店买英语词典。", isCorrect: true, rationale: { zh: "✔️ 正确！动词1（去商店）+ 动词2（买词典），目的明确，语序完美。", en: "✔️ Correct! Verb 1 (go to shop) + Verb 2 (buy dictionary). perfect.", th: "✔️ ถูกต้อง! กริยา 1 (去商店) + กริยา 2 (买词典) วัตถุประสงค์ชัดเจน ลำดับคำสมบูรณ์", id: "✔️ Benar! Kata Kerja 1 (pergi ke toko) + Kata Kerja 2 (membeli kamus).", fr: "✔️ Correct! Verbe 1 (aller au magasin) + Verbe 2 (acheter un dictionnaire).", ar: "✔️ صحيح! الفعل 1 (ذهب إلى المتجر) + الفعل 2 (اشترى قاموساً). ترتيب مثالي." } },
+            { text: "B. 老师买英语词典去商店。", isCorrect: false, rationale: { zh: "❌ 错误！不能先买到词典然后再去商店。", en: "❌ Incorrect! You cannot buy the dictionary before arriving at the shop.", th: "❌ ผิด! ไม่สามารถซื้อพจนานุกรมก่อนที่จะไปถึงร้านค้าได้", id: "❌ Salah! Tidak bisa membeli kamus sebelum sampai di toko.", fr: "❌ Incorrect! On ne peut pas acheter avant d'aller au magasin.", ar: "❌ خطأ! لا يمكنك شراء القاموس قبل الذهاب إلى المتجر." } },
+            { text: "C. 老师去买商店英语词典。", isCorrect: false, rationale: { zh: "❌ 错误！把地点“商店”错当作了买的宾语，语意变成了“买商店”。", en: "❌ Incorrect! This implies buying the whole shop instead of the dictionary.", th: "❌ ผิด! กลายเป็นว่าอาจารย์จะไป 'ซื้อร้านค้า' ไม่ใช่ซื้อพจนานุกรม", id: "❌ Salah! Ini berarti membeli seluruh tokonya, sanagt keliru.", fr: "❌ Incorrect! Cela donne l'impression d'acheter le magasin entier.", ar: "❌ خطأ! هذا يعني شراء المتجر نفسه بدلاً من القاموس." } },
+            { text: "D. 去商店老师买英语词典。", isCorrect: false, rationale: { zh: "❌ 错误！主语“老师”应当放在最前面引导整个动作句。", en: "❌ Incorrect! The subject '老师' must lead the sentence.", th: "❌ ผิด! ประธาน '老师' ต้องอยู่หน้าสุดเพื่อนำประโยคบอกเล่านี้", id: "❌ Salah! Subjek '老师' harus berada di paling depan kalimat.", fr: "❌ Incorrect! Le sujet doit guider la phrase en premier.", ar: "❌ خطأ! الفاعل '老师' يجب أن يكون في بداية الجملة." } }
+        ],
+        hint: { zh: "提示：先移动到某个地方，再执行买的动作。", en: "Hint: Move to a place first, then execute the buying action.", th: "คำใบ้: เคลื่อนที่ไปสถานที่ก่อน จากนั้นจึงทำกริยาซื้อ", id: "Petunjuk: Pergi ke tempatnya dulu, baru lakukan tindakan membeli.", fr: "Indice: Allez d'abord dans le lieu, puis achetez.", ar: "تلميح: انتقل إلى المكان أولاً，ثم قم بفعل الشراء." }
+    },
+    {
+        num: 8, words: "留学生_______留学生楼听音乐。",
+        translations: { zh: "选择填空：动作1和地点的关系。", en: "Fill in the blank: The relationship between Action 1 and place.", th: "เติมคำในช่องว่าง: ความสัมพันธ์ระหว่างกริยาที่ 1 และสถานที่", id: "Isilah titik-titik: Hubungan antara Tindakan 1 dan tempat.", fr: "Remplissez le blanc: Relation entre le verbe 1 et le lieu.", ar: "ملء الفراغ: العلاقة بين الفعل الأول والمكان." },
+        options: [
+            { text: "A. 回", isCorrect: true, rationale: { zh: "✔️ 正确！“回 + 留学生楼（宿舍）”作为动作1，表示回到某处，接着做动作2“听音乐”。", en: "✔️ Correct! '回' (return) fits as Verb 1 before doing Verb 2 'listen to music'.", th: "✔️ ถูกต้อง! '回' (กลับ) เหมาะสมที่สุดสำหรับกริยาที่ 1 ก่อนจะทำกริยาที่ 2 'ฟังเพลง'", id: "✔️ Benar! '回' (kembali) sangat cocok sebagai Kata Kerja 1 sebelum mendengarkan musik.", fr: "✔️ Correct! '回' (rentrer) convient comme Verbe 1 avant d'écouter de la musique.", ar: "✔️ صحيح! '回' (يعود) يناسب كفعل أول قبل القيام بالفعل الثاني." } },
+            { text: "B. 见", isCorrect: false, rationale: { zh: "❌ 错误！“见（见面）”后面不能直接接大楼这种无生命地点名词作宾语。", en: "❌ Incorrect! '见' (to meet) cannot take an inanimate building as its direct object.", th: "❌ ผิด! '见' (เจอ) ไม่สามารถตามด้วยสถานที่ที่ไม่มีชีวิตอย่างตึกเรียนหรืออาคารได้", id: "❌ Salah! '见' (bertemu) tidak bisa langsung diikuti oleh kata benda bangunan.", fr: "❌ Incorrect! '见' (rencontrer) ne peut pas prendre un bâtiment comme objet.", ar: "❌ خطأ! '见' (يقابل) لا يمكن أن يتبعها مبنى غير حي كمفعول به مباشر." } },
+            { text: "C. 问", isCorrect: false, rationale: { zh: "❌ 错误！不能说“问留学生楼”，只能问人问题。", en: "❌ Incorrect! You cannot ask a building; you can only ask a person.", th: "❌ ผิด! ไม่สามารถถามตึกได้ '问' ใช้กับบุคคลเท่านั้น", id: "❌ Salah! Anda tidak bisa bertanya kepada bangunan.", fr: "❌ Incorrect! On ne peut pas demander à un bâtiment.", ar: "❌ خطأ! لا يمكنك سؤال المبنى؛ السؤال يكون للشخص فقط." } },
+            { text: "D. 吃饭", isCorrect: false, rationale: { zh: "❌ 错误！“吃饭”本身已自带宾语，后面无法再连着放“留学生楼”这个地点。", en: "❌ Incorrect! '吃饭' already has an object, it cannot be followed by another place noun directly.", th: "❌ ผิด! '吃饭' มีกรรมในตัวอยู่แล้ว ไม่สามารถตามด้วยคำนามสถานที่ได้โดยตรง", id: "❌ Salah! '吃饭' sudah memiliki objek, tidak bisa langsung disambung tempat.", fr: "❌ Incorrect! '吃饭' a déjà son objet, il ne peut pas être suivi d'un lieu.", ar: "❌ خطأ! '吃饭' يحتوي بالفعل على مفعول به، لا يمكن أن يتبعه اسم مكان مباشرة." } }
+        ],
+        hint: { zh: "提示：留学生楼是住所，通常用“回”或“去”。", en: "Hint: International student building is a residence; usually use '回' or '去'.", th: "คำใบ้: ตึกหอพักนักเรียนต่างชาติเป็นที่อยู่อาศัย มักใช้คำว่า '回' หรือ '去'", id: "Petunjuk: Gedung asrama adalah tempat tinggal; biasanya menggunakan '回' atau '去'.", fr: "Indice: Le bâtiment des étudiants est une résidence; on utilise '回' ou '去'.", ar: "تلميح: مبنى الطلاب الأجانب هو سكن؛ وعادة نستخدم '回' أو '去'." }
+    },
+    {
+        num: 9, words: "我们 / 咖啡 / 喝 / ☕ / 去咖啡馆",
+        translations: { zh: "连词成句：休闲娱乐目的场景。", en: "Word Order: Leisure and purpose scenario.", th: "จัดเรียงประโยค: สถานการณ์พักผ่อนหย่อนใจและวัตถุประสงค์", id: "Urutan Kata: Skenario rekreasi dan tujuan.", fr: "Ordre des mots: Scénario de loisir et de but.", ar: "ترتيب الكلمات: سيناريو الترفيه والغرض." },
+        options: [
+            { text: "A. 我们去咖啡馆喝咖啡。", isCorrect: true, rationale: { zh: "✔️ 正确！去咖啡馆（动词1）是为了喝咖啡（动词2，目的）。", en: "✔️ Correct! Going to the café (Verb 1) is for the purpose of drinking coffee (Verb 2).", th: "✔️ ถูกต้อง! ไปคาเฟ่ (กริยา 1) เพื่อดื่มกาแฟ (กริยา 2 เป็นวัตถุประสงค์)", id: "✔️ Benar! Pergi ke kafe (Kata Kerja 1) adalah untuk minum kopi (Kata Kerja 2).", fr: "✔️ Correct! Aller au café (Verbe 1) a pour but de boire un café (Verbe 2).", ar: "✔️ صحيح! الذهاب إلى المقهى (فعل 1) هو من أجل شرب القهوة (فعل 2، الغرض)." } },
+            { text: "B. 我们喝咖啡去咖啡馆。", isCorrect: false, rationale: { zh: "❌ 错误！不符合汉语文法逻辑，不能把目的放在位移前面。", en: "❌ Incorrect! Breaks Chinese grammar logic by putting purpose before movement.", th: "❌ ผิด! ผิดหลักไวยากรณ์จีน ไม่สามารถเอาวัตถุประสงค์ขึ้นก่อนการเคลื่อนที่ได้", id: "❌ Salah! Menyalahi logika tata bahasa Mandarin karena menaruh tujuan di depan.", fr: "❌ Incorrect! Contredit la logique grammaticale chinoise.", ar: "❌ خطأ! يخالف منطق القواعد الصينية بوضع الغرض قبل الحركة." } },
+            { text: "C. 去咖啡馆我们喝咖啡。", isCorrect: false, rationale: { zh: "❌ 错误！主语位置错误，主语必须在整个动作序列的最前面。", en: "❌ Incorrect! The subject must be at the very beginning of the action sequence.", th: "❌ ผิด! ประธานวางผิดตำแหน่ง ต้องอยู่หน้าสุดของอนุกรมกริยาทั้งหมด", id: "❌ Salah! Subjek harus berada di paling awal dari seluruh rangkaian tindakan.", fr: "❌ Incorrect! Le sujet doit être au tout début de la séquence.", ar: "❌ خطأ! الفاعل يجب أن يكون في بداية سلسلة الأفعال." } },
+            { text: "D. 我们去喝咖啡馆咖啡。", isCorrect: false, rationale: { zh: "❌ 错误！把地点词“咖啡馆”硬塞到了动词“喝”的后面，搭配完全错误。", en: "❌ Incorrect! You cannot 'drink a café'; the word order is completely broken.", th: "❌ ผิด! เอาคำว่า '咖啡馆' (คาเฟ่) ไปไว้หลังกริยา '喝' (ดื่ม) กลายเป็นดื่มคาเฟ่ ซึ่งผิดอย่างรุนแรง", id: "❌ Salah! Anda tidak bisa 'minum kafe'; urutan katanya rusak total.", fr: "❌ Incorrect! On ne peut pas 'boire un café-restaurant'.", ar: "❌ خطأ! لا يمكنك 'شرب المقهى'؛ ترتيب الكلمات خاطئ تماماً." } }
+        ],
+        hint: { zh: "提示：去 + 咖啡馆 + 做什么动作？", en: "Hint: Go to + café + do what action?", th: "คำใบ้: 去 + คาเฟ่ + ทำกริยาอะไร?", id: "Petunjuk: 去 + kafe + melakukan tindakan apa?", fr: "Indice: 去 + café + faire quelle action?", ar: "تلميح: 去 + المقهى + أي فعل تقوم به؟" }
+    },
+    {
+        num: 10, words: "老师明天坐高铁_______上海开会。",
+        translations: { zh: "选择填空：高频商务与旅行场景。", en: "Fill in the blank: Business and travel scenario.", th: "เติมคำในช่องว่าง: สถานการณ์ธุรกิจและการเดินทาง", id: "Isilah titik-titik: Skenario bisnis dan perjalanan.", fr: "Remplissez le blanc: Scénario d'affaires et de voyage.", ar: "ملء الفراغ: سيناريو العمل والسفر." },
+        options: [
+            { text: "A. 去", isCorrect: true, rationale: { zh: "✔️ 正确！这里是一个包含三项连锁动作或方式的句子：“乘高铁（方式）+ 去上海（动词2）+ 开会（动词3，最终目的）”。", en: "✔️ Correct! A multi-verb serial sentence: Take bullet train (Manner) + Go to Shanghai (Verb 2) + Hold a meeting (Verb 3, Purpose).", th: "✔️ ถูกต้อง! ประโยคกริยาต่อเนื่องหลายทอด: ขึ้นรถไฟความเร็วสูง (วิธีการ) + 去 เซี่ยงไฮ้ (กริยา 2) + ประصول (กริยา 3 วัตถุประสงค์)", id: "✔️ Benar! Kalimat serial multi-kata kerja: Naik kereta cepat (Cara) + 去 Shanghai (Kata Kerja 2) + Rapat (Kata Kerja 3, Tujuan).", fr: "✔️ Correct! Une phrase en série multi-verbes : Prendre le TGV (Moyen) + 去 Shanghai (Verbe 2) + Réunion (Verbe 3).", ar: "✔️ صحيح! جملة أفعال متسلسلة متعددة: ركوب القطار السريع (طريقة) + 去 شنغهاي (فعل 2) + حضور اجتماع (فعل 3، الغرض)." } },
+            { text: "B. 在", isCorrect: false, rationale: { zh: "❌ 错误！前面已经有动态行为“乘高铁”，这里需要连接目的地，不能用静态的介词“在”。", en: "❌ Incorrect! '乘高铁' is a dynamic action, we need a directional movement verb here, not '在'.", th: "❌ ผิด! ข้างหน้ามีการกระทำ '乘高铁' แล้ว ตรงนี้ต้องการกริยาเคลื่อนที่ไปยังจุดหมาย ไม่ใช่ '在'", id: "❌ Salah! '乘高铁' adalah tindakan dinamis, kita butuh kata kerja arah di sini, bukan '在'.", fr: "❌ Incorrect! On a besoin d'un verbe de mouvement directionnel ici.", ar: "❌ خطأ! '乘高铁' حركة ديناميكية، نحتاج هنا إلى فعل حركة اتجاهي وليس '在'." } },
+            { text: "C. 是", isCorrect: false, rationale: { zh: "❌ 错误！判断动词“是”在此处完全无法充当连动句的行为连接线。", en: "❌ Incorrect! The verb '是' cannot link the location and purpose here.", th: "❌ ผิด! กริยาบอกความสัมพันธ์ '是' ไม่สามารถใช้เชื่อมสถานที่และวัตถุประสงค์ในที่นี้ได้", id: "❌ Salah! Kata kerja '是' tidak bisa menghubungkan tempat dan tujuan di sini.", fr: "❌ Incorrect! Le verbe '是' ne peut pas lier le lieu et le but ici.", ar: "❌ خطأ! الفعل '是' لا يمكنه ربط المكان والغرض هنا." } },
+            { text: "D. 从", isCorrect: false, rationale: { zh: "❌ 错误！“从”是介词（从...开始），在此处会导致句子结构残缺，缺少去上海的动词。", en: "❌ Incorrect! '从' is a preposition; using it here leaves the sentence missing a core movement verb.", th: "❌ ผิด! '从' เป็นบุพบท (จาก...) ทำให้ประโยคขาดคำกริยาหลักที่จะไปยังเซี่ยงไฮ้", id: "❌ Salah! '从' adalah kata depan, menggunakannya di sini membuat kalimat kehilangan kata kerja gerak.", fr: "❌ Incorrect! '从' est une préposition, le verbe de mouvement manquerait.", ar: "❌ خطأ! '从' حرف جر، استخدامه هنا يجعل الجملة تفتقر إلى فعل الحركة الأساسي." } }
+        ],
+        hint: { zh: "提示：乘高铁 + 去 + 某地 + 做事。", en: "Hint: Take bullet train + go to + some place + do something.", th: "คำใบ้: ขึ้นรถไฟความเร็วสูง + 去 + สถานที่ + ทำงาน", id: "Petunjuk: Naik kereta cepat + pergi ke + tempat + melakukan sesuatu.", fr: "Indice: Prendre le TGV + aller + lieu + faire quelque chose.", ar: "تلميح: ركوب القطار السريع + الذهاب إلى + مكان + لفعل شيء." }
+    }
+];
+
+let currentLang = 'zh';
+
+function renderQuiz() {
+    const container = document.getElementById('quiz-container');
+    container.innerHTML = '';
+
+    quizData.forEach((q, qIdx) => {
+        const card = document.createElement('div');
+        card.className = 'question-card';
+        card.innerHTML = `
+            <div class="question-title">
+                <strong>第 ${q.num} 题：</strong>${q.words} <br>
+                <small style="color:#555; font-weight:normal; display:block; margin-top:5px;">💡 ${q.translations[currentLang]}</small>
+            </div>
+            <div class="options" id="options-${qIdx}"></div>
+            <div class="result-box" id="result-${qIdx}"></div>
+            <span class="hint-text" id="hint-${qIdx}">📌 ${q.hint[currentLang]}</span>
+        `;
+        container.appendChild(card);
+
+        const optionsContainer = document.getElementById(`options-${qIdx}`);
+        q.options.forEach((opt, oIdx) => {
+            const btn = document.createElement('button');
+            btn.className = 'option-btn';
+            btn.innerText = opt.text;
+            btn.onclick = () => checkAnswer(qIdx, oIdx);
+            optionsContainer.appendChild(btn);
+        });
+    });
+}
+
+function checkAnswer(qIdx, oIdx) {
+    const selectedOption = quizData[qIdx].options[oIdx];
+    const resultBox = document.getElementById(`result-${qIdx}`);
+    resultBox.style.display = 'block';
+    resultBox.className = 'result-box ' + (selectedOption.isCorrect ? 'correct' : 'incorrect');
+    resultBox.innerText = selectedOption.rationale[currentLang];
+}
+
+function switchLanguage(lang, event) {
+    currentLang = lang;
+    document.querySelectorAll('.lang-btn').forEach(btn => btn.classList.remove('active'));
+    event.target.classList.add('active');
+    renderQuiz();
+}
+
+renderQuiz();
+</script>
+</body>
+</html>
